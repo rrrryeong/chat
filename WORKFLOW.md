@@ -244,3 +244,60 @@
 - package.json·.env.example·README를 확인해 Node.js 26 이상, 의존성 설치, .env 작성, Supabase 허용 URL·제공자 설정, npm start와 localhost:3000 접속 방법을 안내했다.
 - 기존 .env를 덮어쓰지 않도록 예제 복사 명령에 `cp -n`을 사용했다. 실제 서버 실행·설정 변경은 하지 않았다.
 - WORKFLOW.md만 업데이트했다. 코드 변경이 없어 Red/Green 및 유닛·E2E 테스트는 실행하지 않았다.
+
+---
+
+## 18. 프롬프트
+
+```
+render로 배포하는 방법 다시 작성해서 RENDER.md에 작성해줘.
+```
+
+### 결과
+- 현재 package.json·환경변수·서버 실행 방식과 Render·Supabase 공식 문서를 확인하고 RENDER.md를 전체 재작성했다.
+- 저장소 준비 → Supabase URL·공개 키 확보 → Render Web Service 생성·Root Directory·명령 설정 → 환경변수·첫 배포 → 운영 URL 등록 → 이메일 매직 링크·SMTP → Google OAuth → 최종 점검 순서로 정리했다.
+- Render 앱 출처와 Supabase Google 콜백 주소를 구분하는 표, 업데이트·단일 인스턴스·Free 제한·문제 해결 안내를 포함했다.
+- RENDER.md와 WORKFLOW.md만 수정했다. 코드 변경이 없어 Red/Green 및 유닛·E2E 테스트는 실행하지 않았다. 실제 배포·설정 변경·commit·push는 수행하지 않았다.
+
+---
+
+## 19. 프롬프트
+
+```
+로그인 서비스가 설정되지 않았습니다. 관리자에게 문의해 주세요.
+라고 뜨는데 어떻게 해야해?
+```
+
+### 결과
+- 해당 메시지는 서버 시작 시 SUPABASE_URL 또는 SUPABASE_PUBLISHABLE_KEY를 읽지 못해 인증 설정이 null일 때 /auth/config가 503을 반환하면서 표시됨을 확인했다.
+- 로컬 .env 파일과 두 변수의 비어 있지 않은 값 존재 여부만 확인했다. 실제 값은 출력하지 않았다. 로컬 실행이라면 프로젝트 루트에서 npm start로 서버 재시작을 안내했다.
+- Render 실행이라면 로컬 .env와 별도로 해당 서비스의 Environment에 두 변수를 등록하고 Save and deploy로 반영하도록 안내했다. Render 환경변수와 Supabase 공개 키 공식 문서를 확인했다.
+- WORKFLOW.md만 수정했다. 실행 중 서버·환경변수·계정 설정은 변경하지 않았고 코드 변경이 없어 Red/Green 및 유닛·E2E 테스트는 실행하지 않았다.
+
+---
+
+## 20. 프롬프트
+
+```
+구글로 계속하기를 하면 {"code":400,"error_code":"validation_failed","msg":"Unsupported provider: provider is not enabled"} 라는 에러가 뜹니다.
+```
+
+### 결과
+- 클라이언트가 올바른 `provider: 'google'`로 OAuth를 요청함을 확인했다. 오류는 요청 대상 Supabase 프로젝트에서 Google 제공자가 활성화되지 않았음을 의미한다고 설명했다.
+- Supabase Google 제공자 활성화·Client ID/Secret 저장, Google Cloud Web application OAuth 클라이언트 및 Supabase 콜백 등록 절차를 공식 문서로 확인해 안내했다.
+- 이미 제공자를 켰다면 앱의 SUPABASE_URL이 설정한 프로젝트와 일치하는지 확인하고, URL 변경 시 로컬 재시작 또는 Render 재배포하도록 안내했다.
+- WORKFLOW.md만 수정했다. 코드·외부 계정 설정 변경 없이 안내했으며 Red/Green 및 유닛·E2E 테스트는 실행하지 않았다.
+
+---
+
+## 21. 프롬프트
+
+```
+400 오류: redirect_uri_mismatch
+라는 에러가 뜹니다.
+```
+
+### 결과
+- Supabase·Google 공식 OAuth 문서를 확인해 요청의 redirect_uri와 Google OAuth 클라이언트의 허용 리디렉션 URI 불일치 오류임을 설명했다.
+- Supabase Google 제공자 화면의 정확한 콜백 주소를 Google Auth Platform의 해당 Web application 클라이언트 Authorized redirect URIs에 등록하도록 안내했다. Supabase Client ID와 Google 클라이언트의 일치, 프로토콜·프로젝트 ID·경로·끝 슬래시도 확인하도록 안내했다.
+- Google에 등록할 Supabase 콜백 주소와 Supabase에 등록할 앱 복귀 URL을 구분했다. WORKFLOW.md만 수정했고 코드·외부 설정 변경 및 테스트 실행은 하지 않았다(Red/Green·유닛·E2E 해당 없음).
