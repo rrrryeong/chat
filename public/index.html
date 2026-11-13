@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
+    />
+    <meta name="theme-color" content="#FEF7FF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141218" media="(prefers-color-scheme: dark)" />
+    <title>익명 채팅</title>
+    <meta name="referrer" content="no-referrer" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app" data-state="lobby" data-auth="loading">
+      <header class="main-bar">
+        <h1 class="title-large">익명 채팅</h1>
+        <p class="me body-medium">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-person" /></svg>
+          <span data-testid="my-name"></span>
+        </p>
+        <button type="button" class="text-button interactive auth-logout">로그아웃</button>
+      </header>
+
+      <section class="auth-panel" aria-labelledby="auth-title">
+        <div class="auth-card">
+          <h2 id="auth-title" class="title-large">로그인</h2>
+          <p class="body-medium">로그인 후에도 채팅에는 익명 이름만 표시됩니다.</p>
+          <form id="auth-form">
+            <div class="text-field">
+              <input id="auth-email" type="email" autocomplete="email" placeholder=" " required maxlength="254" aria-describedby="auth-status" />
+              <label for="auth-email">이메일</label>
+            </div>
+            <button id="auth-send" type="submit" class="filled-button interactive" disabled>로그인 링크 보내기</button>
+          </form>
+          <p class="body-small">처음 이용하면 이메일 인증 후 계정이 만들어집니다. 비밀번호는 필요하지 않습니다.</p>
+          <button id="auth-google" type="button" class="text-button interactive" disabled>Google로 계속하기</button>
+          <p id="auth-status" data-testid="auth-status" class="body-medium" role="status" aria-live="polite">로그인 서비스를 불러오는 중…</p>
+        </div>
+      </section>
+
+      <div class="banner body-medium" data-testid="connection-banner" role="status" hidden>
+        연결이 끊겼습니다. 다시 연결하는 중…
+      </div>
+
+      <div class="panes">
+        <section id="lobby" class="pane lobby" aria-label="방 목록">
+          <div class="lobby-inner">
+            <form id="room-form" class="room-form" novalidate>
+              <div class="text-field">
+                <input
+                  id="room-input"
+                  data-testid="room-input"
+                  type="text"
+                  maxlength="30"
+                  placeholder=" "
+                  autocomplete="off"
+                  enterkeyhint="go"
+                  aria-describedby="room-error"
+                />
+                <label for="room-input">방 이름</label>
+              </div>
+              <button type="submit" class="filled-button interactive" data-testid="room-submit">입장</button>
+              <p id="room-error" class="supporting-text body-small" data-testid="room-error" role="alert">
+                새 이름이면 방을 만들고, 있는 이름이면 그 방에 들어갑니다.
+              </p>
+            </form>
+
+            <h2 class="list-title title-small">열린 방</h2>
+            <p class="empty body-medium" data-testid="room-empty">열린 방이 없습니다. 새 방을 만들어 보세요.</p>
+            <ul id="room-list" class="room-list" data-testid="room-list"></ul>
+          </div>
+        </section>
+
+        <section id="chat" class="pane chat" aria-label="채팅">
+          <div class="placeholder body-large" data-testid="chat-placeholder">방을 고르거나 새로 만들어 보세요.</div>
+
+          <div class="chat-room">
+            <header class="chat-bar">
+              <button
+                type="button"
+                class="icon-button interactive back-button"
+                data-testid="back-button"
+                aria-label="나가기"
+              >
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-arrow-back" /></svg>
+              </button>
+              <div class="chat-title">
+                <h2 id="chat-room-name" class="title-large" data-testid="chat-room-name"></h2>
+                <p class="body-small chat-sub">
+                  <span data-testid="chat-count"></span> · 나: <span data-testid="chat-my-name"></span>
+                </p>
+              </div>
+              <button type="button" class="text-button interactive leave-text" data-testid="leave-button">
+                나가기
+              </button>
+              <button type="button" class="text-button interactive auth-logout chat-logout">로그아웃</button>
+            </header>
+
+            <ol id="message-list" class="message-list" data-testid="message-list" aria-live="polite"></ol>
+
+            <form id="message-form" class="message-form">
+              <input
+                id="message-input"
+                class="message-input body-large"
+                data-testid="message-input"
+                type="text"
+                maxlength="500"
+                placeholder="메시지 입력"
+                autocomplete="off"
+                enterkeyhint="send"
+                aria-label="메시지"
+              />
+              <button
+                type="submit"
+                class="icon-button interactive send-button"
+                data-testid="send-button"
+                aria-label="전송"
+                disabled
+              >
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-send" /></svg>
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
+
+      <div class="snackbar body-medium" data-testid="snackbar" role="status" hidden></div>
+    </div>
+
+    <!-- Material Symbols (Outlined, 400) 아이콘 -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="icon-arrow-back" viewBox="0 -960 960 960">
+        <path d="M313-440l224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+      </symbol>
+      <symbol id="icon-send" viewBox="0 -960 960 960">
+        <path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Zm0 0v-400 400Z" />
+      </symbol>
+      <symbol id="icon-person" viewBox="0 -960 960 960">
+        <path
+          d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"
+        />
+      </symbol>
+    </svg>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/vendor/supabase.js"></script>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
